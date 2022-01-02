@@ -131,6 +131,7 @@ public class RevisionService extends AbstractService {
                                 List<File> files = c.getFiles();
 
                                 for (File file : files) {
+                                    //TODO
                                     if (config.get("test-file").equalsIgnoreCase(file.getFilename())){
                                         System.out.println("O arquivo de teste foi modificado");
                                     }
