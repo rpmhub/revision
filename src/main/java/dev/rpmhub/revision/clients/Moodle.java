@@ -28,6 +28,12 @@ import dev.rpmhub.revision.mappers.moodle.ListCourse;
 import dev.rpmhub.revision.mappers.moodle.ListUser;
 import dev.rpmhub.revision.mappers.moodle.Module;
 
+/**
+ * Moodle Rest client
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
+ */
 @RegisterRestClient
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,39 +41,39 @@ public interface Moodle {
 
         @POST
         public ListUser getUser(
-                        @FormParam("wstoken") String wstoken,
-                        @FormParam("wsfunction") String wsfunction,
-                        @FormParam("moodlewsrestformat") String restFormat,
-                        @FormParam("criteria[0][key]") String key,
-                        @FormParam("criteria[0][value]") String value);
+                @FormParam("wstoken") String wstoken,
+                @FormParam("wsfunction") String wsfunction,
+                @FormParam("moodlewsrestformat") String restFormat,
+                @FormParam("criteria[0][key]") String key,
+                @FormParam("criteria[0][value]") String value);
 
         @POST
         public Module getModule(
-                        @FormParam("wstoken") String wstoken,
-                        @FormParam("wsfunction") String wsfunction,
-                        @FormParam("moodlewsrestformat") String restFormat,
-                        @FormParam("cmid") String cmid);
+                @FormParam("wstoken") String wstoken,
+                @FormParam("wsfunction") String wsfunction,
+                @FormParam("moodlewsrestformat") String restFormat,
+                @FormParam("cmid") String cmid);
 
         @POST
         public ListCourse getCourses(
-                        @FormParam("wstoken") String wstoken,
-                        @FormParam("wsfunction") String wsfunction,
-                        @FormParam("moodlewsrestformat") String restFormat,
-                        @FormParam("courseids[0]") String idCourse);
+                @FormParam("wstoken") String wstoken,
+                @FormParam("wsfunction") String wsfunction,
+                @FormParam("moodlewsrestformat") String restFormat,
+                @FormParam("courseids[0]") String idCourse);
 
         @POST
         public void updateGrade(
-                        @FormParam("wstoken") String wstoken,
-                        @FormParam("wsfunction") String wsfunction,
-                        @FormParam("moodlewsrestformat") String restFormat,
-                        @FormParam("assignmentid") int idAssign,
-                        @FormParam("userid") int idUser,
-                        @FormParam("grade") float grade,
-                        @FormParam("attemptnumber") int attemptnumber,
-                        @FormParam("addattempt") int addattempt,
-                        @FormParam("workflowstate") String workflowstate,
-                        @FormParam("applytoall") int applytoall,
-                        @FormParam("plugindata[assignfeedbackcomments_editor][text]") String comment,
-                        @FormParam("plugindata[assignfeedbackcomments_editor][format]") int editorFormat);
+                @FormParam("wstoken") String wstoken,
+                @FormParam("wsfunction") String wsfunction,
+                @FormParam("moodlewsrestformat") String restFormat,
+                @FormParam("assignmentid") int idAssign,
+                @FormParam("userid") int idUser,
+                @FormParam("grade") float grade,
+                @FormParam("attemptnumber") int attemptnumber,
+                @FormParam("addattempt") int addattempt,
+                @FormParam("workflowstate") String workflowstate,
+                @FormParam("applytoall") int applytoall,
+                @FormParam("plugindata[assignfeedbackcomments_editor][text]") String comment,
+                @FormParam("plugindata[assignfeedbackcomments_editor][format]") int editorFormat);
 
 }

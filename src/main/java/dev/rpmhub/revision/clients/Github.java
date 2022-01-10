@@ -31,6 +31,12 @@ import dev.rpmhub.revision.mappers.github.CommitData;
 import dev.rpmhub.revision.mappers.github.ListWorkflow;
 import dev.rpmhub.revision.mappers.moodle.User;
 
+/**
+ * Github Rest client
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
+ */
 @RegisterRestClient
 @Produces(MediaType.APPLICATION_JSON)
 public interface Github {
@@ -42,20 +48,20 @@ public interface Github {
         @GET
         @Path("/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs")
         public ListWorkflow getRuns(
-                        @PathParam("owner") String owner,
-                        @PathParam("repo") String repo,
-                        @PathParam("workflow_id") String idWorkflow);
+                @PathParam("owner") String owner,
+                @PathParam("repo") String repo,
+                @PathParam("workflow_id") String idWorkflow);
 
         @GET
         @Path("/repos/{owner}/{repo}/commits")
         public List<CommitData> getCommits(
-                        @PathParam("owner") String owner,
-                        @PathParam("repo") String repo);
+                @PathParam("owner") String owner,
+                @PathParam("repo") String repo);
 
         @GET
         @Path("/repos/{owner}/{repo}/commits/{sha}")
         public Commit getCommit(
-                        @PathParam("owner") String owner,
-                        @PathParam("repo") String repo,
-                        @PathParam("sha") String sha);
+                @PathParam("owner") String owner,
+                @PathParam("repo") String repo,
+                @PathParam("sha") String sha);
 }
