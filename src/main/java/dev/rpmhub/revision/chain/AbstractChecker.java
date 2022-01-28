@@ -50,6 +50,15 @@ public abstract class AbstractChecker {
     /** localized messages */
     protected ResourceBundle messages;
 
+    /* REST Clients */
+    @Inject
+    @RestClient
+    protected Github github;
+
+    @Inject
+    @RestClient
+    protected Moodle moodle;
+
     /** Configurations */
     @ConfigProperty(name = "moodle.client.wstoken")
     protected String MOODLE_TOKEN;
@@ -68,27 +77,6 @@ public abstract class AbstractChecker {
 
     @ConfigProperty(name = "moodle.client.wsfunction.grade")
     protected String MOODLE_GRADE;
-
-    /* REST Clients */
-    @Inject
-    @RestClient
-    protected Github github;
-
-    @Inject
-    @RestClient
-    protected Moodle moodle;
-
-    /* Moodle User */
-    protected static ListUser moodleUser;
-
-    /* Github User */
-    protected User githubUser;
-
-    /** Moodle Module */
-    protected static Module curseModule;
-
-    /** Moodle Courses */
-    protected static ListCourse moodleCourses;
 
     /**
      * Discovers the assign intro of a course
@@ -140,7 +128,7 @@ public abstract class AbstractChecker {
     /**
      * Returns a list of commits of the user
      *
-     * @param commits :  list of commits
+     * @param commits : A list of commits
      * @param login :  The github login name
      *
      * @return A list of CommitData objects
@@ -164,10 +152,7 @@ public abstract class AbstractChecker {
      * @return An User object
      */
     protected User getGithubUser(String githubProfileURL){
-        if (githubUser != null){
-            githubUser = github.getUser(getGithubLogin("githubProfileURL"));
-        }
-        return githubUser;
+        return github.getUser(getGithubLogin(githubProfileURL));
     }
 
     /**
@@ -178,11 +163,8 @@ public abstract class AbstractChecker {
      * @return Return a ListUser object from Moodle
      */
     protected ListUser getMoodleUser(String moodleProfileURL ){
-        if (moodleUser == null){
-            moodleUser = moodle.getUser(MOODLE_TOKEN, MOODLE_USERS, MOODLE_JSON_FORMAT, "id",
-            this.getMoodleId(moodleProfileURL));
-        }
-        return moodleUser;
+        return moodle.getUser(MOODLE_TOKEN, MOODLE_USERS, MOODLE_JSON_FORMAT, "id",
+        this.getMoodleId(moodleProfileURL));
     }
 
     /**
@@ -195,11 +177,8 @@ public abstract class AbstractChecker {
      * @return Returns the curse module object in Moodle
      */
     protected Module getCurseModule(String moodleAssignURL){
-        if (curseModule == null){
-            curseModule = moodle.getModule(MOODLE_TOKEN, MOODLE_MODULE, MOODLE_JSON_FORMAT,
+        return moodle.getModule(MOODLE_TOKEN, MOODLE_MODULE, MOODLE_JSON_FORMAT,
                 this.getMoodleId(moodleAssignURL));
-        }
-        return curseModule;
     }
 
     /**
@@ -210,12 +189,9 @@ public abstract class AbstractChecker {
      *
      * @return A lists of courses (with only one course)
      */
-    protected ListCourse getMoodlCourse(Module curseModule){
-        if (moodleCourses == null){
-            moodleCourses = moodle.getCourses(MOODLE_TOKEN, MOODLE_ASSIGN, MOODLE_JSON_FORMAT,
+    protected ListCourse getMoodleCourse(Module curseModule){
+        return moodle.getCourses(MOODLE_TOKEN, MOODLE_ASSIGN, MOODLE_JSON_FORMAT,
             curseModule.getCm().getCourse());
-        }
-        return moodleCourses;
     }
 
     /**
@@ -239,7 +215,7 @@ public abstract class AbstractChecker {
      *
      * @param url : URL from Moodle with an 'id' at the end
      *
-     * @return A Moodle 'id' in  STring format
+     * @return A Moodle 'id' in String format
      */
     protected String getMoodleId(String url) {
         int index = url.lastIndexOf('=');

@@ -30,6 +30,9 @@ import dev.rpmhub.revision.mappers.github.File;
 import dev.rpmhub.revision.mappers.moodle.ListCourse;
 import dev.rpmhub.revision.mappers.moodle.Module;
 
+/**
+ * Verifies if the user changed the test case
+ */
 @ApplicationScoped
 public class TestChangeChecker extends AbstractChecker implements Checker {
 
@@ -50,7 +53,7 @@ public class TestChangeChecker extends AbstractChecker implements Checker {
 
         // Returns the courses and the assigns
         // We need this step to retrieve the assign intro (description)
-        ListCourse courses = getMoodlCourse(module);
+        ListCourse courses = getMoodleCourse(module);
 
         // Gets the assign intro (description)
         String intro = this.getAssignIntro(courses, input.get("moodleAssignURL"));
@@ -66,11 +69,11 @@ public class TestChangeChecker extends AbstractChecker implements Checker {
                     List<CommitData> commits = github.getCommits(githubLogin, config.get("repo"));
                     List<CommitData> userCommits = checkCommits(commits, githubLogin);
 
+                    boolean flag = true;
                     for (CommitData commit : userCommits) {
                         Commit c = github.getCommit(githubLogin, config.get("repo"), commit.getSha());
                         List<File> files = c.getFiles();
 
-                        boolean flag = true;
                         for (File file : files) {
                             if (config.get("test-file").equalsIgnoreCase(file.getFilename())){
                                 LOGGER.info("O arquivo de teste foi modificado");
@@ -81,11 +84,11 @@ public class TestChangeChecker extends AbstractChecker implements Checker {
                                 LOGGER.info("O arquivo de teste NAO foi modificado");
                             }
                         }
-                        if (flag)
+                    }
+                    if (flag)
                             result = this.getNextChecker().check(input);
                         else
                             result = flag;
-                    }
                 }
              }
         }

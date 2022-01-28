@@ -18,6 +18,7 @@ package dev.rpmhub.revision;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -80,10 +81,9 @@ public class RevisionService {
             @URL @NotBlank @FormParam("moodleProfileURL") String moodleProfileURL,
             @URL @NotBlank @FormParam("moodleAssignURL") String moodleAssignURL,
             @HeaderParam("Content-Language") String language) {
-
-                LOGGER.info("msg");
                 Map<String,String> input = this.createGithubInput(githubProfileURL, moodleProfileURL, moodleAssignURL, language);
                 Checker githubChain = this.createGithubChain();
+                LOGGER.info(input.get("hash"));
                 return githubChain.check(input);
     }
 
@@ -120,6 +120,7 @@ public class RevisionService {
         input.put("moodleProfileURL", moodleProfileURL);
         input.put("moodleAssignURL", moodleAssignURL);
         input.put("language", language);
+        input.put("hash", UUID.randomUUID().toString());
 
         return input;
     }

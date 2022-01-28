@@ -30,6 +30,8 @@ import dev.rpmhub.revision.mappers.github.Commit;
 import dev.rpmhub.revision.mappers.github.CommitData;
 import dev.rpmhub.revision.mappers.github.ListWorkflow;
 import dev.rpmhub.revision.mappers.moodle.User;
+import io.quarkus.cache.CacheKey;
+import io.quarkus.cache.CacheResult;
 
 /**
  * Github Rest client
@@ -43,25 +45,29 @@ public interface Github {
 
         @GET
         @Path("/users/{login}")
-        public User getUser(@PathParam("login") String login);
+        @CacheResult(cacheName = "github-user")
+        public User getUser(@CacheKey @PathParam("login") String login);
 
         @GET
         @Path("/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs")
+        @CacheResult(cacheName = "github-runs")
         public ListWorkflow getRuns(
-                @PathParam("owner") String owner,
-                @PathParam("repo") String repo,
-                @PathParam("workflow_id") String idWorkflow);
+                @CacheKey @PathParam("owner") String owner,
+                @CacheKey @PathParam("repo") String repo,
+                @CacheKey @PathParam("workflow_id") String idWorkflow);
 
         @GET
         @Path("/repos/{owner}/{repo}/commits")
+        @CacheResult(cacheName = "github-commits")
         public List<CommitData> getCommits(
-                @PathParam("owner") String owner,
-                @PathParam("repo") String repo);
+                @CacheKey @PathParam("owner") String owner,
+                @CacheKey @PathParam("repo") String repo);
 
         @GET
         @Path("/repos/{owner}/{repo}/commits/{sha}")
+        @CacheResult(cacheName = "github-commit")
         public Commit getCommit(
-                @PathParam("owner") String owner,
-                @PathParam("repo") String repo,
-                @PathParam("sha") String sha);
+                @CacheKey @PathParam("owner") String owner,
+                @CacheKey @PathParam("repo") String repo,
+                @CacheKey @PathParam("sha") String sha);
 }

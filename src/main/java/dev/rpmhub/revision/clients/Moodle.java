@@ -27,6 +27,8 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import dev.rpmhub.revision.mappers.moodle.ListCourse;
 import dev.rpmhub.revision.mappers.moodle.ListUser;
 import dev.rpmhub.revision.mappers.moodle.Module;
+import io.quarkus.cache.CacheKey;
+import io.quarkus.cache.CacheResult;
 
 /**
  * Moodle Rest client
@@ -40,26 +42,29 @@ import dev.rpmhub.revision.mappers.moodle.Module;
 public interface Moodle {
 
         @POST
+        @CacheResult(cacheName = "moodle-user")
         public ListUser getUser(
                 @FormParam("wstoken") String wstoken,
                 @FormParam("wsfunction") String wsfunction,
                 @FormParam("moodlewsrestformat") String restFormat,
                 @FormParam("criteria[0][key]") String key,
-                @FormParam("criteria[0][value]") String value);
+                @CacheKey @FormParam("criteria[0][value]") String value);
 
         @POST
+        @CacheResult(cacheName = "moodle-module")
         public Module getModule(
                 @FormParam("wstoken") String wstoken,
                 @FormParam("wsfunction") String wsfunction,
                 @FormParam("moodlewsrestformat") String restFormat,
-                @FormParam("cmid") String cmid);
+                @CacheKey @FormParam("cmid") String cmid);
 
         @POST
+        @CacheResult(cacheName = "moodle-course")
         public ListCourse getCourses(
                 @FormParam("wstoken") String wstoken,
                 @FormParam("wsfunction") String wsfunction,
                 @FormParam("moodlewsrestformat") String restFormat,
-                @FormParam("courseids[0]") String idCourse);
+                @CacheKey @FormParam("courseids[0]") String idCourse);
 
         @POST
         public void updateGrade(

@@ -26,6 +26,9 @@ import dev.rpmhub.revision.chain.Checker;
 import dev.rpmhub.revision.mappers.moodle.ListUser;
 import dev.rpmhub.revision.mappers.moodle.User;
 
+/**
+ * Verifies if the users names of Github and Moodle are the same
+ */
 @ApplicationScoped
 public class MoodleUserChecker extends AbstractChecker implements Checker {
 
@@ -35,22 +38,24 @@ public class MoodleUserChecker extends AbstractChecker implements Checker {
     public boolean check(Map<String, String> input) {
         LOGGER.info("MoodleChecker");
 
-        boolean result;
+        boolean result = false;
+
+        // Get Github user
+        User gUser = getGithubUser(input.get("githubProfileURL"));
 
         // Get Moodle user
         ListUser mUsers = getMoodleUser(input.get("moodleProfileURL"));
 
-        // Get Github user
-        User gUser = github.getUser(this.getGithubLogin(input.get("githubProfileURL")));
-
-        // Verifies if the Moodle and Github name are the same
-        if (mUsers.getFirstUserName().equalsIgnoreCase(gUser.getName())) {
-            LOGGER.info("Os usuário são os mesmos");
-            result = this.getNextChecker().check(input);
-        }
-        else{
-            LOGGER.info("Não são os mesmos usuários");
-            result = false;
+        if (mUsers != null &&  gUser != null){
+            // Verifies if the Moodle and Github name are the same
+            if (mUsers.getFirstUserName().equalsIgnoreCase(gUser.getName())) {
+                LOGGER.info("Os usuário são os mesmos");
+                // send to the next checker
+                result = this.getNextChecker().check(input);
+            }
+            else{
+                LOGGER.info("Não são os mesmos usuários");
+            }
         }
         return result;
     }

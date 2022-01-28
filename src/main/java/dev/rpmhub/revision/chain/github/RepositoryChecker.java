@@ -28,6 +28,10 @@ import dev.rpmhub.revision.mappers.github.Run;
 import dev.rpmhub.revision.mappers.moodle.ListCourse;
 import dev.rpmhub.revision.mappers.moodle.Module;
 
+/**
+ * Checks if the latest run of github action is a success
+ * and verifies if the repository is a fork
+ */
 @ApplicationScoped
 public class RepositoryChecker extends AbstractChecker implements Checker {
 
@@ -42,15 +46,14 @@ public class RepositoryChecker extends AbstractChecker implements Checker {
         String moodleAssignURL = input.get("moodleAssignURL");
         String githubLogin = getGithubLogin(input.get("githubProfileURL"));
 
-
         // Module in this case will be the assign
-        // This step discoveries the course id and the instance id (real data base id)
+        // This step discoveries the course id and the instance id (the data base id)
         // The instance id is necessary to update the grade
         Module module = getCurseModule(moodleAssignURL);
 
         // Returns the courses and the assigns
         // We need this step to retrieve the assign intro (description)
-        ListCourse courses = getMoodlCourse(module);
+        ListCourse courses = getMoodleCourse(module);
 
         // Gets the assign intro (description)
         String intro = this.getAssignIntro(courses, moodleAssignURL);

@@ -35,7 +35,7 @@ public class MoodleSendChecker extends AbstractChecker implements Checker {
         LOGGER.info("MoodleSendChecker");
 
         // Module in this case will be the assign
-        // This step discoveries the course id and the instance id (real data base id)
+        // This step discoveries the course id and the instance id (the data base id)
         // The instance id is necessary to update the grade
         Module module = getCurseModule(input.get("moodleAssignURL"));
 
@@ -43,7 +43,7 @@ public class MoodleSendChecker extends AbstractChecker implements Checker {
 
         moodle.updateGrade(MOODLE_TOKEN, MOODLE_GRADE, MOODLE_JSON_FORMAT,
                 module.getCm().getInstance(), idUser,
-                10, -1, 1, "rpm", 1, "hashadddd", 2);
+                10, -1, 1, "rpm", 1, input.get("hash"), 2);
 
         return true;
     }
