@@ -26,6 +26,9 @@ import dev.rpmhub.revision.chain.Checker;
 import dev.rpmhub.revision.mappers.moodle.Module;
 /**
  * Sends the grade to the Moodle
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
  */
 @ApplicationScoped
 public class MoodleSendChecker extends AbstractChecker implements Checker {

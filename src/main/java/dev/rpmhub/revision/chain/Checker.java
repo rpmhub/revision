@@ -17,7 +17,12 @@
 package dev.rpmhub.revision.chain;
 
 import java.util.Map;
-
+/**
+ * The interface od a checker
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
+ */
 public interface Checker {
 
     public boolean check(Map<String, String> input);

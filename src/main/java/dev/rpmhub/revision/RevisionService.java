@@ -17,7 +17,6 @@
 package dev.rpmhub.revision;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -35,6 +34,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.hibernate.validator.constraints.URL;
 import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
@@ -47,6 +48,8 @@ import dev.rpmhub.revision.chain.moodle.MoodleSendChecker;
 import dev.rpmhub.revision.exceptions.RevisionServiceException;
 
 /**
+ * Revision service
+ *
  * @author Rodrigo Prestes Machado
  * @version Jan. 2022
  */
@@ -79,8 +82,8 @@ public class RevisionService {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    //@Retry(maxRetries = 2, delay = 1000)
-    //@Timeout(5000)
+    @Retry(maxRetries = 2, delay = 1000)
+    @Timeout(5000)
     @Bulkhead(3)
     public String check(
             @URL @NotBlank @FormParam("githubProfileURL") String githubProfileURL,

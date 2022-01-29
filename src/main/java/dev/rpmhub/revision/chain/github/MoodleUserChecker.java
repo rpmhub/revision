@@ -32,6 +32,9 @@ import dev.rpmhub.revision.mappers.moodle.User;
 
 /**
  * Verifies if the users names of Github and Moodle are the same
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
  */
 @ApplicationScoped
 public class MoodleUserChecker extends AbstractChecker implements Checker {

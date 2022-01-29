@@ -41,7 +41,12 @@ import dev.rpmhub.revision.mappers.moodle.ListCourse;
 import dev.rpmhub.revision.mappers.moodle.ListUser;
 import dev.rpmhub.revision.mappers.moodle.Module;
 import dev.rpmhub.revision.mappers.moodle.User;
-
+/**
+ * Implements a base for a checker
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
+ */
 public abstract class AbstractChecker {
 
     /** Store the next checker in the chain */
@@ -102,7 +107,18 @@ public abstract class AbstractChecker {
     /**
      * Extracts the YAML from the assign's intro (description). The YAML has
      * information about the repository and the workflow of the original
-     * exercise
+     * exercise.
+     *
+     * Example of current YAML format to add in Moodle assign:
+     *
+     *  <!--
+     *      repo: "cpw2-web-storage"
+     *      workflow: "npm-test.yml"
+     *      test-file: "correcao.js"
+     *  -->
+     *
+     * In this first version the service has the limitatio of only one
+     * test file
      *
      * @param intro :  The HTML of the assign intro
      * @return A map with 'repo' and 'workflow' keys

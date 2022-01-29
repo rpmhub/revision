@@ -22,7 +22,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.jboss.resteasy.specimpl.ResponseBuilderImpl;
-
+/**
+ * Revision Service exception
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
+ */
 public class RevisionServiceException extends WebApplicationException {
 
     public RevisionServiceException(String message, Status status ) {

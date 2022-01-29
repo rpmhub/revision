@@ -35,6 +35,9 @@ import dev.rpmhub.revision.mappers.moodle.Module;
 
 /**
  * Verifies if the user changed the test case file
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
  */
 @ApplicationScoped
 public class TestChangeChecker extends AbstractChecker implements Checker {

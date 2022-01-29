@@ -34,6 +34,9 @@ import dev.rpmhub.revision.mappers.moodle.Module;
 /**
  * Checks if the latest run of github action is a success
  * and verifies if the repository is a fork
+ *
+ * @author Rodrigo Prestes Machado
+ * @version Jan. 2022
  */
 @ApplicationScoped
 public class RepositoryChecker extends AbstractChecker implements Checker {
