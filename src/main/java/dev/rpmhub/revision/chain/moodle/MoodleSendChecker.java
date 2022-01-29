@@ -24,7 +24,9 @@ import javax.enterprise.context.ApplicationScoped;
 import dev.rpmhub.revision.chain.AbstractChecker;
 import dev.rpmhub.revision.chain.Checker;
 import dev.rpmhub.revision.mappers.moodle.Module;
-
+/**
+ * Sends the grade to the Moodle
+ */
 @ApplicationScoped
 public class MoodleSendChecker extends AbstractChecker implements Checker {
 
@@ -39,12 +41,13 @@ public class MoodleSendChecker extends AbstractChecker implements Checker {
         // The instance id is necessary to update the grade
         Module module = getCurseModule(input.get("moodleAssignURL"));
 
-        int idUser = Integer.valueOf(getMoodleId(input.get("moodleProfileURL")));
+        int idUser = Integer.parseInt(getMoodleId(input.get("moodleProfileURL")));
 
         moodle.updateGrade(MOODLE_TOKEN, MOODLE_GRADE, MOODLE_JSON_FORMAT,
                 module.getCm().getInstance(), idUser,
                 10, -1, 1, "rpm", 1, input.get("hash"), 2);
 
+        LOGGER.info("A atividade foi atualizada");
         return true;
     }
 

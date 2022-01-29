@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2022 RPMHub Revision Service @ https://github.com/rpmhub/revision
  *
@@ -17,12 +18,15 @@
 package dev.rpmhub.revision.chain.github;
 
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.core.Response;
 
 import dev.rpmhub.revision.chain.AbstractChecker;
 import dev.rpmhub.revision.chain.Checker;
+import dev.rpmhub.revision.exceptions.RevisionServiceException;
 import dev.rpmhub.revision.mappers.moodle.ListUser;
 import dev.rpmhub.revision.mappers.moodle.User;
 
@@ -36,6 +40,7 @@ public class MoodleUserChecker extends AbstractChecker implements Checker {
 
     @Override
     public boolean check(Map<String, String> input) {
+
         LOGGER.info("MoodleChecker");
 
         boolean result = false;
@@ -49,12 +54,14 @@ public class MoodleUserChecker extends AbstractChecker implements Checker {
         if (mUsers != null &&  gUser != null){
             // Verifies if the Moodle and Github name are the same
             if (mUsers.getFirstUserName().equalsIgnoreCase(gUser.getName())) {
-                LOGGER.info("Os usuário são os mesmos");
+                LOGGER.info("O usuário do Moodle e Github são os mesmos");
                 // send to the next checker
                 result = this.getNextChecker().check(input);
             }
             else{
-                LOGGER.info("Não são os mesmos usuários");
+                String message = messages.getString("MoodleUserChecker.users");
+                LOGGER.log(Level.WARNING, message);
+                throw new RevisionServiceException(message, Response.Status.BAD_REQUEST);
             }
         }
         return result;

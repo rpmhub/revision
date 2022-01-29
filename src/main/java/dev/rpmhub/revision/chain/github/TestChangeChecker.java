@@ -18,12 +18,15 @@ package dev.rpmhub.revision.chain.github;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.core.Response;
 
 import dev.rpmhub.revision.chain.AbstractChecker;
 import dev.rpmhub.revision.chain.Checker;
+import dev.rpmhub.revision.exceptions.RevisionServiceException;
 import dev.rpmhub.revision.mappers.github.Commit;
 import dev.rpmhub.revision.mappers.github.CommitData;
 import dev.rpmhub.revision.mappers.github.File;
@@ -31,7 +34,7 @@ import dev.rpmhub.revision.mappers.moodle.ListCourse;
 import dev.rpmhub.revision.mappers.moodle.Module;
 
 /**
- * Verifies if the user changed the test case
+ * Verifies if the user changed the test case file
  */
 @ApplicationScoped
 public class TestChangeChecker extends AbstractChecker implements Checker {
@@ -81,14 +84,18 @@ public class TestChangeChecker extends AbstractChecker implements Checker {
                                 break;
                             }
                             else{
-                                LOGGER.info("O arquivo de teste NAO foi modificado");
+                                LOGGER.info("Os testes NÃO foram modificados");
                             }
                         }
                     }
-                    if (flag)
-                            result = this.getNextChecker().check(input);
-                        else
-                            result = flag;
+                    if (flag){
+                        result = this.getNextChecker().check(input);
+                    }
+                    else{
+                        String message = messages.getString("TestChangeChecker.file");
+                        LOGGER.log(Level.WARNING, message);
+                        throw new RevisionServiceException(message, Response.Status.BAD_REQUEST);
+                    }
                 }
              }
         }

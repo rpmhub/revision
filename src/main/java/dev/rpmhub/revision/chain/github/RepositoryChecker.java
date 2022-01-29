@@ -17,12 +17,15 @@
 package dev.rpmhub.revision.chain.github;
 
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.core.Response;
 
 import dev.rpmhub.revision.chain.AbstractChecker;
 import dev.rpmhub.revision.chain.Checker;
+import dev.rpmhub.revision.exceptions.RevisionServiceException;
 import dev.rpmhub.revision.mappers.github.ListWorkflow;
 import dev.rpmhub.revision.mappers.github.Run;
 import dev.rpmhub.revision.mappers.moodle.ListCourse;
@@ -67,8 +70,13 @@ public class RepositoryChecker extends AbstractChecker implements Checker {
                 Run run = actions.getLatestRun();
                 // Verifies if the latest run was a success and the repository is a fork
                 if (run.getConclusion().equalsIgnoreCase("success") && run.getRepository().isFork()) {
-                    LOGGER.info(" teste passou e é um fork");
+                    LOGGER.info("Os testes passaram e é um fork");
                     result = this.getNextChecker().check(input);
+                }
+                else{
+                    String message = messages.getString("RepositoryChecker.repo");
+                    LOGGER.log(Level.WARNING, message);
+                    throw new RevisionServiceException(message, Response.Status.BAD_REQUEST);
                 }
             }
         }

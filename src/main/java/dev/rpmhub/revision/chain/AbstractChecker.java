@@ -47,9 +47,6 @@ public abstract class AbstractChecker {
     /** Store the next checker in the chain */
     protected Checker nextChecker;
 
-    /** localized messages */
-    protected ResourceBundle messages;
-
     /* REST Clients */
     @Inject
     @RestClient
@@ -77,6 +74,9 @@ public abstract class AbstractChecker {
 
     @ConfigProperty(name = "moodle.client.wsfunction.grade")
     protected String MOODLE_GRADE;
+
+    /** localized messages */
+    protected static ResourceBundle messages;
 
     /**
      * Discovers the assign intro of a course
@@ -195,22 +195,6 @@ public abstract class AbstractChecker {
     }
 
     /**
-     * Sets the localization of the strings
-     *
-     * @param The HTTP Content-Language of the request
-     */
-    protected void setLocation(String language) {
-        Locale locale;
-        if (language != null) {
-            locale = language.contains("en") ? new Locale("en", "US") : new Locale("pt", "BR");
-        } else {
-            locale = new Locale("pt", "BR");
-
-        }
-        this.messages = ResourceBundle.getBundle("Messages", locale);
-    }
-
-    /**
      * Extracts the 'id' at the end of a Moodle URL
      *
      * @param url : URL from Moodle with an 'id' at the end
@@ -240,5 +224,22 @@ public abstract class AbstractChecker {
 
     public void setNextChecker(Checker checker) {
         this.nextChecker = checker;
+    }
+
+    /**
+     * Sets the localization of the strings
+     *
+     * @param The HTTP Content-Language of the request
+     */
+    public static ResourceBundle setLocation(String language) {
+        Locale locale;
+        if (language != null) {
+            locale = language.contains("en") ? new Locale("en", "US") : new Locale("pt", "BR");
+        } else {
+            locale = new Locale("pt", "BR");
+
+        }
+        messages = ResourceBundle.getBundle("Messages", locale);
+        return messages;
     }
 }

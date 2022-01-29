@@ -17,7 +17,9 @@
 package dev.rpmhub.revision;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -30,15 +32,19 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.hibernate.validator.constraints.URL;
+import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 
+import dev.rpmhub.revision.chain.AbstractChecker;
 import dev.rpmhub.revision.chain.Checker;
 import dev.rpmhub.revision.chain.github.MoodleUserChecker;
 import dev.rpmhub.revision.chain.github.RepositoryChecker;
 import dev.rpmhub.revision.chain.github.TestChangeChecker;
 import dev.rpmhub.revision.chain.moodle.MoodleSendChecker;
+import dev.rpmhub.revision.exceptions.RevisionServiceException;
 
 /**
  * @author Rodrigo Prestes Machado
@@ -76,15 +82,32 @@ public class RevisionService {
     //@Retry(maxRetries = 2, delay = 1000)
     //@Timeout(5000)
     @Bulkhead(3)
-    public boolean check(
+    public String check(
             @URL @NotBlank @FormParam("githubProfileURL") String githubProfileURL,
             @URL @NotBlank @FormParam("moodleProfileURL") String moodleProfileURL,
             @URL @NotBlank @FormParam("moodleAssignURL") String moodleAssignURL,
             @HeaderParam("Content-Language") String language) {
-                Map<String,String> input = this.createGithubInput(githubProfileURL, moodleProfileURL, moodleAssignURL, language);
-                Checker githubChain = this.createGithubChain();
-                LOGGER.info(input.get("hash"));
-                return githubChain.check(input);
+                ResourceBundle messages = AbstractChecker.setLocation(language);
+                String result = null;
+                try {
+                    Map<String,String> input = this.createGithubInput(githubProfileURL, moodleProfileURL, moodleAssignURL, language);
+                    Checker githubChain = this.createGithubChain();
+                    LOGGER.info(input.get("hash"));
+                    result = Boolean.toString(githubChain.check(input));
+                }
+                catch (IndexOutOfBoundsException e) {
+                    String message = messages.getString("RevisionService.IndexOutOfBoundsException");
+                    throw new RevisionServiceException(message, Response.Status.NOT_FOUND);
+                }
+                catch(ResteasyWebApplicationException e){
+                    String message = messages.getString("RevisionService.ResteasyWebApplicationException");
+                    throw new RevisionServiceException(message, Response.Status.NOT_FOUND);
+                }
+                catch(NullPointerException e){
+                    String message = messages.getString("RevisionService.NullPointerException");
+                    throw new RevisionServiceException(message, Response.Status.NOT_FOUND);
+                }
+                return result;
     }
 
     /**

@@ -16,20 +16,22 @@
 
 package dev.rpmhub.revision.exceptions;
 
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.jboss.resteasy.specimpl.ResponseBuilderImpl;
 
-public class RevisionException extends WebApplicationException {
+public class RevisionServiceException extends WebApplicationException {
 
-    public RevisionException(String message) {
-        super(init(message));
+    public RevisionServiceException(String message, Status status ) {
+        super(init(message, status));
     }
 
-    private static Response init(String message) {
+    private static Response init(String message, Status status) {
         ResponseBuilderImpl builder = new ResponseBuilderImpl();
-        builder.status(Response.Status.BAD_REQUEST);
+        builder.status(status);
         builder.entity(message);
         return builder.build();
     }
