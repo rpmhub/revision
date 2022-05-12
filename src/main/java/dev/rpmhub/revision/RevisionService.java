@@ -81,16 +81,17 @@ public class RevisionService {
      */
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 2, delay = 1000)
     @Timeout(5000)
     @Bulkhead(3)
-    public String check(
+    public Map<String,String> check(
             @URL @NotBlank @FormParam("githubProfileURL") String githubProfileURL,
             @URL @NotBlank @FormParam("moodleProfileURL") String moodleProfileURL,
             @URL @NotBlank @FormParam("moodleAssignURL") String moodleAssignURL,
             @HeaderParam("Content-Language") String language) {
                 ResourceBundle messages = AbstractChecker.setLocation(language);
+                String message = null;
                 String result = null;
                 try {
                     Map<String,String> input = this.createGithubInput(githubProfileURL, moodleProfileURL, moodleAssignURL, language);
@@ -99,18 +100,23 @@ public class RevisionService {
                     result = Boolean.toString(githubChain.check(input));
                 }
                 catch (IndexOutOfBoundsException e) {
-                    String message = messages.getString("RevisionService.IndexOutOfBoundsException");
+                    message = messages.getString("RevisionService.IndexOutOfBoundsException");
                     throw new RevisionServiceException(message, Response.Status.NOT_FOUND);
                 }
                 catch(ResteasyWebApplicationException e){
-                    String message = messages.getString("RevisionService.ResteasyWebApplicationException");
+                    message = messages.getString("RevisionService.ResteasyWebApplicationException");
                     throw new RevisionServiceException(message, Response.Status.NOT_FOUND);
                 }
                 catch(NullPointerException e){
-                    String message = messages.getString("RevisionService.NullPointerException");
+                    message = messages.getString("RevisionService.NullPointerException");
                     throw new RevisionServiceException(message, Response.Status.NOT_FOUND);
                 }
-                return result;
+
+                if (result == "true") {
+                    message = "Tarefa enviada com sucesso!";
+                }
+                Map<String, String> response = Map.of("Message", message);
+                return response;
     }
 
     /**

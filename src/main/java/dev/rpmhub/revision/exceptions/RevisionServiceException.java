@@ -17,11 +17,12 @@
 package dev.rpmhub.revision.exceptions;
 
 
+import java.util.Map;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.jboss.resteasy.specimpl.ResponseBuilderImpl;
 /**
  * Revision Service exception
  *
@@ -35,10 +36,16 @@ public class RevisionServiceException extends WebApplicationException {
     }
 
     private static Response init(String message, Status status) {
-        ResponseBuilderImpl builder = new ResponseBuilderImpl();
-        builder.status(status);
-        builder.entity(message);
-        return builder.build();
+        return Response
+        .status(status)
+        .entity(formatMessage(message))
+        .build();
     }
 
+    // transform excpetion message in a hashmap
+    private static Map<String, String> formatMessage(String message) {
+        Map<String, String> formattedMessage = Map.of("Message", message);
+        return formattedMessage;
+    }
+    
 }
