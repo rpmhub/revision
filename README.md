@@ -13,10 +13,6 @@ You can run your application in dev mode that enables live coding using:
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-## Running the application with the frontend
-
-./mvnw exec:exec@npm-watch quarkus:dev
-
 ## Packaging and running the application
 
 The application can be packaged using:
@@ -50,3 +46,7 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/moodle-0.1.0-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+
+## Running the application with the frontend in development mode
+
+./mvnw exec:exec@npm-watch quarkus:dev
