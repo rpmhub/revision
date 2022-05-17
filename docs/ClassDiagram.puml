@@ -1,0 +1,212 @@
+@startuml
+
+abstract        "AbstractService"
+
+class           "RevisionService"
+
+
+
+
+class RevisionService {
+    public String verify()
+}
+
+
+
+
+package "clients" {
+    
+    Interface Github {
+        User getUser()
+        ListWorkflow getRuns()
+        List<CommitData> getCommits()
+        Commit getCommit()
+    }
+
+    Interface "Moodle" {
+        ListUser getUser()
+        Module getModule()
+        ListCourse getCourses()
+        void updateGrade()
+    }
+
+}
+
+package "exception" {
+    class RevisionServiceException {
+        - Response()
+        
+    }
+}
+
+
+package "mappers" {
+    package "github" {
+        class Author {
+            String login
+            String name
+            String email
+            gets()
+            sets()
+        }
+        class CommitData {
+            String sha
+            Commit commit
+            Author author
+            gets()
+            sets()
+        }
+        class File {
+            String sha
+            String filename
+            String status
+            gets()
+            sets()
+        }
+        class Commit {
+            Author author
+            Author commiter
+            List<File> files
+            gets()
+            sets()
+            addFiles()
+        }
+        class ListWorkFlow {
+            List<Run> workflow_runs
+            getWorkflow_runs()
+            setWorkflow_runs()
+            Run getLatestRun()
+        }
+        class Repository {
+            boolean fork
+            isFork()
+            setFork()
+        }
+        class Run {
+            String conclusion
+            Repository repository
+            gets()
+            sets()
+        }
+    }
+
+    package "moodle" {
+        class "Assign" {
+            String course
+            int instance
+            String modname
+            String intro
+            int cmid
+            gets()
+            sets()
+        }
+        class "Course" {
+            String fullname
+            List<Assign> assignments
+            gets()
+            sets()
+        }
+        class "ListCourse" {
+                List<Course> courses
+                getCourses()
+                setCourses()
+                addCourses()
+        }
+        class "ListUser" {
+            List<User> users
+                getUsers()
+                setUsers()
+                addUsers()
+        }
+        class "Module" {
+            Assign cm
+            getCm()
+            setCm()
+        }
+        class           "User" {
+            int id
+            String name
+            String login
+            String fullname
+            gets()
+            sets()
+        }
+    }
+
+}
+
+package "chain" {
+    package "github " {
+       class MoodleUserChecker {
+           
+       }
+       class RepositoryChecker {
+
+       }
+       class TestChangeChecker {
+
+       }       
+    }
+    package "moodle " {
+        class MoodleSendChecker {
+            
+        }
+    }
+    abstract AbstractChecker {
+
+    }
+    interface Checker {
+        + check(Map) : boolean
+        + getNextChecker() : Checker
+        + setNextChecker(Checker) : void 
+    }
+
+    MoodleSendChecker --|> AbstractChecker
+    MoodleSendChecker ..|> Checker
+    MoodleSendChecker --> Module
+    
+    MoodleUserChecker --|> AbstractChecker
+    MoodleUserChecker ..|> Checker
+    MoodleUserChecker --> RevisionServiceException
+    MoodleUserChecker --> ListUser
+    MoodleUserChecker --> User
+
+    RepositoryChecker --|> AbstractChecker
+    RepositoryChecker ..|> Checker
+    RepositoryChecker --> RevisionServiceException
+    RepositoryChecker --> ListWorkFlow
+    RepositoryChecker --> Run
+    RepositoryChecker --> ListCourse
+    RepositoryChecker --> Module
+
+    
+    TestChangeChecker --|> AbstractChecker
+    TestChangeChecker ..|> Checker
+    TestChangeChecker --> RevisionServiceException
+    TestChangeChecker --> Commit
+    TestChangeChecker --> CommitData
+    TestChangeChecker --> File
+    TestChangeChecker --> ListCourse
+    TestChangeChecker --> Module
+
+
+}
+RevisionService --> MoodleUserChecker
+RevisionService --> RepositoryChecker
+RevisionService --> TestChangeChecker
+RevisionService --> MoodleSendChecker
+RevisionService --> RevisionServiceException
+RevisionService --> Checker
+RevisionService --> AbstractChecker
+
+
+Github --> Commit
+Github --> CommitData
+Github --> ListWorkFlow
+Github --> User
+
+Moodle --> ListCourse
+Moodle --> ListUser
+Moodle --> Module
+
+@enduml
