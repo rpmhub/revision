@@ -49,4 +49,6 @@ If you want to learn more about building native executables, please consult http
 
 ## Running the application with the frontend in development mode
 
+```shell script
 ./mvnw exec:exec@npm-watch quarkus:dev
+```

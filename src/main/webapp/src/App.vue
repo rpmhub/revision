@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container my-3">
-    <h2 class="text-ccenter">Revision</h2>
-    <h4 class="text-center">Validador automático de trabalhos dos estudantes de cursos de</h4>
+    <h2 class="text-center">Revision</h2>
+    <h4 class="text-center">Validador automático de trabalhos de estudantes de cursos de programação</h4>
 
     <div class="card mt-3">
       <div class="card-body">
