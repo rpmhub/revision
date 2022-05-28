@@ -74,6 +74,9 @@ public abstract class AbstractChecker {
     @ConfigProperty(name = "moodle.client.wsfunction.module")
     protected String MOODLE_MODULE;
 
+    @ConfigProperty(name = "moodle.client.wsfunction.enrolled")
+    protected String MOODLE_ENROLLED;
+
     @ConfigProperty(name = "moodle.client.wsfunction.assign")
     protected String MOODLE_ASSIGN;
 
@@ -178,9 +181,20 @@ public abstract class AbstractChecker {
      *
      * @return Return a ListUser object from Moodle
      */
-    protected ListUser getMoodleUser(String moodleProfileURL ){
+    protected ListUser getMoodleUser(String moodleProfileURL){
         return moodle.getUser(MOODLE_TOKEN, MOODLE_USERS, MOODLE_JSON_FORMAT, "id",
         this.getMoodleId(moodleProfileURL));
+    }
+
+    /**
+     * Returns a list of users from Moodle enrolled in a Course
+     *
+     * @param courseModule : A course module object
+     *
+     * @return Return a list of users enrolled in a course module from Moodle
+     */
+    protected ListUser getMoodleEnrolledUsers(Module courseModule){
+        return moodle.getEnrolled(MOODLE_TOKEN, MOODLE_ENROLLED, MOODLE_JSON_FORMAT, courseModule.getCm().getCourse());
     }
 
     /**
@@ -192,7 +206,7 @@ public abstract class AbstractChecker {
      *
      * @return Returns the curse module object in Moodle
      */
-    protected Module getCurseModule(String moodleAssignURL){
+    protected Module getCourseModule(String moodleAssignURL){
         return moodle.getModule(MOODLE_TOKEN, MOODLE_MODULE, MOODLE_JSON_FORMAT,
                 this.getMoodleId(moodleAssignURL));
     }
@@ -201,13 +215,13 @@ public abstract class AbstractChecker {
      * Returns the courses and the assigns
      * We need this step to retrieve the assign intro (description)
      *
-     * @param curseModule : A curse module object
+     * @param courseModule : A course module object
      *
      * @return A lists of courses (with only one course)
      */
-    protected ListCourse getMoodleCourse(Module curseModule){
+    protected ListCourse getMoodleCourse(Module courseModule){
         return moodle.getCourses(MOODLE_TOKEN, MOODLE_ASSIGN, MOODLE_JSON_FORMAT,
-            curseModule.getCm().getCourse());
+            courseModule.getCm().getCourse());
     }
 
     /**

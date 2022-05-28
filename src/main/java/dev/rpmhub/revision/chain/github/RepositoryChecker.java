@@ -55,7 +55,7 @@ public class RepositoryChecker extends AbstractChecker implements Checker {
         // Module in this case will be the assign
         // This step discoveries the course id and the instance id (the data base id)
         // The instance id is necessary to update the grade
-        Module module = getCurseModule(moodleAssignURL);
+        Module module = getCourseModule(moodleAssignURL);
 
         // Returns the courses and the assigns
         // We need this step to retrieve the assign intro (description)

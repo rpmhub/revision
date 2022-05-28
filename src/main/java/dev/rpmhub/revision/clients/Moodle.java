@@ -67,6 +67,14 @@ public interface Moodle {
                 @CacheKey @FormParam("courseids[0]") String idCourse);
 
         @POST
+        @CacheResult(cacheName = "moodle-enrolled")
+        public ListUser getEnrolled(
+                @FormParam("wstoken") String wstoken,
+                @FormParam("wsfunction") String wsfunction,
+                @FormParam("moodlewsrestformat") String restFormat,
+                @CacheKey @FormParam("cmid") String cmid);
+        
+        @POST
         public void updateGrade(
                 @FormParam("wstoken") String wstoken,
                 @FormParam("wsfunction") String wsfunction,

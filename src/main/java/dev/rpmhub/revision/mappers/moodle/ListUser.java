@@ -16,9 +16,10 @@
 
 package dev.rpmhub.revision.mappers.moodle;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class ListUser {
+public class ListUser implements Iterable<User> {
 
     public List<User> users;
 
@@ -40,6 +41,11 @@ public class ListUser {
 
     public int getFirstUserId() {
         return this.users.get(0).getId();
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return users.iterator();
     }
 
 }

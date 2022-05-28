@@ -42,6 +42,7 @@ import org.jboss.resteasy.client.exception.ResteasyWebApplicationException;
 import dev.rpmhub.revision.chain.AbstractChecker;
 import dev.rpmhub.revision.chain.Checker;
 import dev.rpmhub.revision.chain.github.MoodleUserChecker;
+import dev.rpmhub.revision.chain.github.EnrolledChecker;
 import dev.rpmhub.revision.chain.github.RepositoryChecker;
 import dev.rpmhub.revision.chain.github.TestChangeChecker;
 import dev.rpmhub.revision.chain.moodle.MoodleSendChecker;
@@ -59,6 +60,7 @@ public class RevisionService {
     private static final Logger LOGGER = Logger.getLogger(RevisionService.class.getName());
 
     @Inject protected MoodleUserChecker moodleUser;
+    @Inject protected EnrolledChecker enrolled;
     @Inject protected RepositoryChecker repository;
     @Inject protected TestChangeChecker testChange;
     @Inject protected MoodleSendChecker moodleSend;
@@ -125,7 +127,8 @@ public class RevisionService {
      * @return The first Checker
      */
     private Checker createGithubChain(){
-        moodleUser.setNextChecker(repository);
+        moodleUser.setNextChecker(enrolled);
+        enrolled.setNextChecker(repository);
         repository.setNextChecker(testChange);
         testChange.setNextChecker(moodleSend);
         return moodleUser;
