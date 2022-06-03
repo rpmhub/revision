@@ -42,7 +42,7 @@ public class MoodleSendChecker extends AbstractChecker implements Checker {
         // Module in this case will be the assign
         // This step discoveries the course id and the instance id (the data base id)
         // The instance id is necessary to update the grade
-        Module module = getCurseModule(input.get("moodleAssignURL"));
+        Module module = getCourseModule(input.get("moodleAssignURL"));
 
         int idUser = Integer.parseInt(getMoodleId(input.get("moodleProfileURL")));
 
