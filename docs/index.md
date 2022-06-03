@@ -25,6 +25,7 @@ Para a integração será necessário criar um web service dentro do Moodle. Sug
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* core_webservice_get_site_info
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* core_course_get_course_module
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* core_course_get_enrolled_users_by_cmid
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* core_user_get_users
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* mod_assign_get_assignments
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* mod_assign_save_grade
@@ -37,7 +38,7 @@ Para a integração será necessário criar um web service dentro do Moodle. Sug
 
 Para que o web service consiga acessar as tarefas e lista de alunos de um determinado curso, o usuário do web service criado nos passos acima precisará estar inscrito no curso.
 
-Feito isto é possível configurar uma atividade (*Assign*) para que possa ser utilizada com o serviço de revisão. Existem três informações importantes que necessitam serem informadas pra o serviço, são elas: repositório (repo), workflow (Github Actions) e o arquivo que implementa os testes (nota: atualmente todos os testes devem ficar num único arquivo). Um exemplo dessa configuração pode ser observada abaixo:
+Feito isto é possível configurar uma atividade (*Assign*) para que possa ser utilizada com o serviço de revisão. Existem três informações importantes que necessitam serem informadas pra o serviço, são elas: repo (repositório do exercício), workflow (o arquivo do Github Actions) e o arquivo que implementa os testes (nota: atualmente todos os testes devem ficar num único arquivo). Um exemplo dessa configuração pode ser observada abaixo:
 
 ```html
 <!--
