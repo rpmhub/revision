@@ -17,10 +17,12 @@
 package dev.rpmhub.revision.chain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -153,13 +155,64 @@ public abstract class AbstractChecker {
         List<CommitData> userCommits = new ArrayList<>();
         for (CommitData commit : commits) {
             Author author = commit.getAuthor();
+            System.out.println("AbstractChecher.COMMIT: " + commit.getCommit().getAuthor().getName());
             if(author != null && author.getLogin().equalsIgnoreCase(login)){
+         //       System.out.println("AbstractChecher.if AUTHOR: " + author.getLogin());
+           //     System.out.println("AbstractChecher.if LOGIN: " + login);
+
                 userCommits.add(commit);
+            } else {
+                System.out.println("AbstractChecher. ELSE ");
+                
             }
         }
         return userCommits;
     }
 
+     protected boolean checkUsers(List<CommitData> commits, String login) {
+         boolean flag = false;
+      //  List<CommitData> userCommits = new ArrayList<>();
+        for (CommitData commit : commits) {
+            Author author = commit.getAuthor();
+           // System.out.println("AbstractChecher. USERS: " + commit.getCommit().getAuthor().getName());
+            
+            System.out.println("author: " + commit.getCommit().getAuthor().getName());
+            System.out.println("commiter: " + commit.getCommit().getCommitter().getName());
+            if (commit.getCommit().getAuthor().getName().equalsIgnoreCase(commit.getCommit().getCommitter().getName())) {
+                System.out.println("commiter = author");
+            } else {
+                System.out.println("commiter != author");
+            }
+          //  System.out.println("autor login" + author.getLogin());
+          //  System.out.println("login" + login);
+            if(author != null && author.getLogin().equalsIgnoreCase(login)){
+         //      userCommits.add(commit);
+       //  System.out.println("if true");
+               flag = true;
+            } else {
+            // return false;
+                flag = false;}
+            }
+    return flag;
+}
+
+protected Set<String> checkUsersList(List<CommitData> commits, String login) {
+    Set<String> set = new HashSet<>();
+    for (CommitData commit : commits) {
+        Author author = commit.getAuthor();
+      //  System.out.println("AbstractChecher.COMMIT: " + commit.getCommit().getAuthor().getName());
+        if(author != null){
+            set.add(commit.getCommit().getCommitter().getEmail());
+     //       System.out.println("AbstractChecher.if AUTHOR: " + author.getLogin());
+       //     System.out.println("AbstractChecher.if LOGIN: " + login);
+          
+        } 
+        
+    }
+
+    return set;
+}
+ 
     /**
      * Returns a user from Github
      *

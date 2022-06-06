@@ -74,6 +74,8 @@ public class RepositoryChecker extends AbstractChecker implements Checker {
                 // Verifies if the latest run was a success and the repository is a fork
                 if (run.getConclusion().equalsIgnoreCase("success") && run.getRepository().isFork()) {
                     LOGGER.info("Os testes passaram e é um fork");
+                    System.out.println("DESCRIPTION: "+ run.getRepository().getDescription());
+                    System.out.println("PARENT: "+ run.getRepository().getParent());
                     result = this.getNextChecker().check(input);
                 }
                 else{

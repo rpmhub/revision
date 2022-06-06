@@ -16,9 +16,15 @@
 
 package dev.rpmhub.revision.mappers.github;
 
+import java.util.Map;
+
 public class Repository {
 
     private boolean fork;
+    private String description;
+    private Repo parent;
+
+
 
     public boolean isFork() {
         return fork;
@@ -26,6 +32,22 @@ public class Repository {
 
     public void setFork(boolean fork) {
         this.fork = fork;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Repo getParent() {
+        return parent;
+    }
+
+    public void setParent(Repo parent) {
+        this.parent = parent;
     }
 
 }

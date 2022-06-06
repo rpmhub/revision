@@ -1,0 +1,9 @@
+@startuml
+
+actor User
+User -> RevisionService : Request
+RevisionService --> MoodleUserChecker
+MoodleUserChecker --> RepositoryChecker
+RepositoryChecker --> TestChangeChecker
+TestChangeChecker --> MoodleSendChecker
+@enduml

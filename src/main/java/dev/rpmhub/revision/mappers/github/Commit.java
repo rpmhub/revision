@@ -27,10 +27,13 @@ public class Commit {
     private List<File> files;
 
     public Author getAuthor() {
+    //    System.out.println("commit.getAUTHOR: " + author.getLogin());
         return author;
     }
 
     public void setAuthor(Author author) {
+      
+
         this.author = author;
     }
 

@@ -82,9 +82,9 @@ public class RevisionService {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    @Retry(maxRetries = 2, delay = 1000)
+    //@Retry(maxRetries = 2, delay = 1000)
     @Timeout(5000)
-    @Bulkhead(3)
+    //@Bulkhead(3)
     public Map<String,String> check(
             @URL @NotBlank @FormParam("githubProfileURL") String githubProfileURL,
             @URL @NotBlank @FormParam("moodleProfileURL") String moodleProfileURL,
@@ -114,6 +114,8 @@ public class RevisionService {
 
                 if (result == "true") {
                     message = "Tarefa enviada com sucesso!";
+                    System.out.println("revision.SUCESSO --- git: " + githubProfileURL + "  moodle: " + moodleProfileURL);
+
                 }
                 Map<String, String> response = Map.of("Message", message);
                 return response;

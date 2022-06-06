@@ -18,6 +18,7 @@ package dev.rpmhub.revision.chain.github;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,11 +74,23 @@ public class TestChangeChecker extends AbstractChecker implements Checker {
                 // Atualmente suporta apenas um arquivo de teste
                 if (config.get("test-file") != null){
                     List<CommitData> commits = github.getCommits(githubLogin, config.get("repo"));
+                    System.out.println("chamada TEstChanger");
                     List<CommitData> userCommits = checkCommits(commits, githubLogin);
+                   // System.out.println("Lista: " + userCommits);
+                    Set<String> userCommits2 = checkUsersList(commits, githubLogin);
+                    System.out.println("Set: " + userCommits2);
+                    Boolean test = false;
+                    System.out.println("CHAMADA boolean");
+                    test = checkUsers(commits, githubLogin);
+                    System.out.println("boolean " + test);
+
+                  //  System.out.println("TestChangeChecher.TEST CHANGE: " + commits);
 
                     boolean flag = true;
                     for (CommitData commit : userCommits) {
+                       // System.out.println("TEST CHANGE: " + commit.getAuthor());
                         Commit c = github.getCommit(githubLogin, config.get("repo"), commit.getSha());
+
                         List<File> files = c.getFiles();
 
                         for (File file : files) {

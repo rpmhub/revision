@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import dev.rpmhub.revision.mappers.github.Commit;
+import dev.rpmhub.revision.mappers.github.Repo;
 import dev.rpmhub.revision.mappers.github.CommitData;
 import dev.rpmhub.revision.mappers.github.ListWorkflow;
 import dev.rpmhub.revision.mappers.moodle.User;
@@ -55,6 +56,14 @@ public interface Github {
                 @CacheKey @PathParam("owner") String owner,
                 @CacheKey @PathParam("repo") String repo,
                 @CacheKey @PathParam("workflow_id") String idWorkflow);
+
+        //codigo nao usado.
+        @GET
+        @Path("/repos/{owner}/{repo}")
+        @CacheResult(cacheName = "github-repo")
+        public Repo getRepo(
+                @CacheKey @PathParam("owner") String owner,
+                @CacheKey @PathParam("repo") String repo);
 
         @GET
         @Path("/repos/{owner}/{repo}/commits")
