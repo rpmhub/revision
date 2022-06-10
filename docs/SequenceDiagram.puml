@@ -1,9 +1,20 @@
 @startuml
 
 actor User
-User -> RevisionService : Request
+User --> RevisionService : Request
+activate RevisionService
 RevisionService --> MoodleUserChecker : Create Chain
+activate MoodleUserChecker
 MoodleUserChecker --> RepositoryChecker : Next Checker
+activate RepositoryChecker
 RepositoryChecker --> TestChangeChecker : Next Checker
+activate TestChangeChecker
 TestChangeChecker --> MoodleSendChecker : Next Checker
+activate MoodleSendChecker
+MoodleSendChecker --> RevisionService : Response
+deactivate 
+deactivate 
+deactivate
+deactivate
+deactivate
 @enduml
