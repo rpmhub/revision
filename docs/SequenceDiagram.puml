@@ -11,6 +11,7 @@ RepositoryChecker --> TestChangeChecker : Next Checker
 activate TestChangeChecker
 TestChangeChecker --> MoodleSendChecker : Next Checker
 activate MoodleSendChecker
+MoodleSendChecker --> MoodleSendChecker : Update Grade
 MoodleSendChecker --> RevisionService : Response
 deactivate 
 deactivate 
